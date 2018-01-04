@@ -29,6 +29,12 @@ jump_buf layout (compatible with FreeBSD):
 .global _lh_setjmp
 .global _lh_longjmp
 
+/* In case the compiler adds underscores to symbol names
+   See also setjmp_amd32.s */
+.global __lh_setjmp
+.global __lh_longjmp
+
+__lh_setjmp:
 _lh_setjmp:                 /* rdi: jmp_buf */
   movq    (%rsp), %rax      /* rip: return address is on the stack */
   movq    %rax, 0 (%rdi)    
@@ -49,6 +55,7 @@ _lh_setjmp:                 /* rdi: jmp_buf */
   xor     %rax, %rax         /* return 0 */
   ret
 
+__lh_longjmp:
 _lh_longjmp:                  /* rdi: jmp_buf, rsi: arg */
   movq  %rsi, %rax            /* return arg to rax */
   
